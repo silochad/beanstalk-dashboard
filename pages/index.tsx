@@ -40,7 +40,7 @@ const Home: NextPage = () => {
             // Whether the Fertilizer system is being used
             ['Is Fertilizing?', 'isFertilizing', undefined, undefined, 'True if Beanstalk still owes beans to Fertilizer.'],
             // BPF indices
-            ['Beans per Fertilizer', 'beansPerFertilizer'],
+            ['Current BPF', 'beansPerFertilizer'],
             ['End BPF', 'getEndBpf', localeNumber(6), undefined, 'The current BPF at which'],
             // Amounts of Fertilizer, Beans, etc.
             ['Fertilized Beans', 'totalFertilizedBeans', localeNumber(6), undefined, 'Beans paid to Fertilizer.'],
