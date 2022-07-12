@@ -3,14 +3,16 @@ import type { NextPage } from 'next'
 import Module from '../components/Module';
 import { ethers } from 'ethers';
 
+const BEAN            = "0xBEA0003eA948Db32082Fc6F4EC0729D258a0444c";
+const BEANCRV3        = "0xc9C32cd16Bf7eFB85Ff14e0c8603cc90F6F2eE49";
 const UNRIPE_BEAN     = "0x1BEA0050E63e05FBb5D8BA2f10cf5800B6224449";
 const UNRIPE_BEANCRV3 = "0x1BEA3CcD22F4EBd3d37d731BA31Eeca95713716D";
 
 const Home: NextPage = () => {
   const [raw, setRaw] = useState(false);
   const { localeNumber, percentNumber } = useMemo(() => ({
-    localeNumber: (decimals: number) => 
-      (v: ethers.BigNumber) => parseFloat(ethers.utils.formatUnits(v, decimals)).toLocaleString('en-us'),
+    localeNumber: (decimals: number, maxFractionDigits?: number) => 
+      (v: ethers.BigNumber) => parseFloat(ethers.utils.formatUnits(v, decimals)).toLocaleString('en-us', { maximumFractionDigits: maxFractionDigits || 3 }),
     percentNumber: (decimals: number) =>
       (v: ethers.BigNumber) => `${(parseFloat(ethers.utils.formatUnits(v, decimals))*100).toFixed(4)}%`
   }), [])
@@ -35,19 +37,29 @@ const Home: NextPage = () => {
         <Module
           title="Fertilizer"
           slots={[
-            ['Is Fertilizing?', 'isFertilizing'],
+            // Whether the Fertilizer system is being used
+            ['Is Fertilizing?', 'isFertilizing', undefined, undefined, 'True if Beanstalk still owes beans to Fertilizer.'],
+            // BPF indices
             ['Beans per Fertilizer', 'beansPerFertilizer'],
-            ['End BPF', 'getEndBpf', localeNumber(6)],
-            ['Total Fertilized', 'totalFertilizedBeans', localeNumber(6)],
-            ['Total Fertilizer', 'totalFertilizerBeans', localeNumber(6)],
-            ['Penalty (BEAN)', 'getPercentPenalty', undefined, [UNRIPE_BEAN]],
-            ['Penalty (BEAN:3CRV)', 'getPercentPenalty', undefined, [UNRIPE_BEANCRV3]],
+            ['End BPF', 'getEndBpf', localeNumber(6), undefined, 'The current BPF at which'],
+            // Amounts of Fertilizer, Beans, etc.
+            ['Fertilized Beans', 'totalFertilizedBeans', localeNumber(6), undefined, 'Beans paid to Fertilizer.'],
+            ['Unfertilized Beans', 'totalUnfertilizedBeans', localeNumber(6), undefined, 'Beans owed to Fertilizer.'],
+            ['Fertilized + Unfertilized Beans', 'totalFertilizerBeans', localeNumber(6), undefined, 'Fertilized Beans + Unfertilized Beans'],
+            ['Active Fertilizer', 'getActiveFertilizer', localeNumber(0), undefined, 'The number of Fertilizer currently receiving Bean mints.'],
+            // Recapitalization Progress
+            ['Remaining Recap', 'remainingRecapitalization', localeNumber(6), undefined, 'The number of USDC remaining to be raised. 1 USDC can purchase 1 FERT.'], // measured in USDC
+            ['Recap Paid Percent', 'getRecapPaidPercent', percentNumber(6)],
+          ]}
+          raw={raw}
+        />
+        <Module
+          title="Unripe"
+          slots={[
+            ['% Penalty (BEAN)', 'getPercentPenalty', undefined, [UNRIPE_BEAN]],
+            ['% Penalty (BEAN:3CRV)', 'getPercentPenalty', undefined, [UNRIPE_BEANCRV3]],
             ['Is Unripe? (BEAN)', 'isUnripe', undefined, [UNRIPE_BEAN]],
             ['Is Unripe? (BEAN:3CRV)', 'isUnripe', undefined, [UNRIPE_BEANCRV3]],
-            ['Remaining Recap', 'remainingRecapitalization', localeNumber(6)],
-            ['Recap Paid Percent', 'getRecapPaidPercent', percentNumber(6)],
-            ['Recap Funded Percent (BEAN)', 'getRecapFundedPercent', percentNumber(6), [UNRIPE_BEAN]],
-            ['Recap Funded Percent (BEAN:3CRV)', 'getRecapFundedPercent', percentNumber(6), [UNRIPE_BEANCRV3]],
             ['Underlying per Unripe (BEAN)', 'getUnderlyingPerUnripeToken', localeNumber(6), [UNRIPE_BEAN]],
             ['Underlying per Unripe (BEAN:3CRV)', 'getUnderlyingPerUnripeToken', localeNumber(18), [UNRIPE_BEANCRV3]],
             ['Total Underlying (BEAN)', 'getTotalUnderlying', localeNumber(6), [UNRIPE_BEAN]],
@@ -76,10 +88,10 @@ const Home: NextPage = () => {
         <Module
           title="BDV"
           slots={[
-            ["Beans", "bdv", localeNumber(6), ['0xBEA0003eA948Db32082Fc6F4EC0729D258a0444c', ethers.utils.parseUnits('1', 6)]],
-            ["Bean:3CRV", "bdv", localeNumber(6), ['0xc9C32cd16Bf7eFB85Ff14e0c8603cc90F6F2eE49', ethers.utils.parseUnits('1', 6)]],
-            ["Unripe Beans", "bdv", localeNumber(6), ['0x1BEA0050E63e05FBb5D8BA2f10cf5800B6224449', ethers.utils.parseUnits('1', 6)]],
-            ["Unripe Bean:3CRV", "bdv", localeNumber(6), ['0x1BEA3CcD22F4EBd3d37d731BA31Eeca95713716D', ethers.utils.parseUnits('1', 6)]],
+            ["Beans", "bdv", localeNumber(6, 6), [BEAN, ethers.utils.parseUnits('1', 6)]],
+            ["Bean:3CRV", "bdv", localeNumber(6, 6), [BEANCRV3, ethers.utils.parseUnits('1', 18)]],
+            ["Unripe Beans", "bdv", localeNumber(6, 6), [UNRIPE_BEAN, ethers.utils.parseUnits('1', 6)]],
+            ["Unripe Bean:3CRV", "bdv", localeNumber(6, 6), [UNRIPE_BEANCRV3, ethers.utils.parseUnits('1', 6)]],
           ]}
           raw={raw}
         />

@@ -10,6 +10,7 @@ type ModuleSlot = [
   method: (keyof Beanstalk['functions']),
   parseResult?: (value: any) => string | JSX.Element,
   args?: any[],
+  desc?: string,
 ];
 
 const Slot = ({
@@ -42,8 +43,9 @@ const Slot = ({
         ) : null}
       </div>
       {exp && (
-        <div className="px-2 text-gray-500 text-sm break-words">
+        <div className="px-2 text-gray-400 text-sm break-words pb-2">
           {slot[1]}({slot[3]?.join(', ')})
+          {slot[4] && <><br/>{slot[4]}</>}
         </div>
       )}
     </>
