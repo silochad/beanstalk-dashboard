@@ -3,7 +3,7 @@ import type { NextPage } from 'next'
 import Module from '../components/Module';
 import { ethers } from 'ethers';
 
-const BEAN            = "0xBEA0003eA948Db32082Fc6F4EC0729D258a0444c";
+const BEAN            = "0xBEA0000029AD1c77D3d5D23Ba2D8893dB9d1Efab";
 const BEANCRV3        = "0xc9C32cd16Bf7eFB85Ff14e0c8603cc90F6F2eE49";
 const UNRIPE_BEAN     = "0x1BEA0050E63e05FBb5D8BA2f10cf5800B6224449";
 const UNRIPE_BEANCRV3 = "0x1BEA3CcD22F4EBd3d37d731BA31Eeca95713716D";
@@ -30,6 +30,7 @@ const Home: NextPage = () => {
         <Module
           title="Sun"
           slots={[
+            ['Paused', 'paused'],
             ['Season', 'season'],
           ]}
           raw={raw}
@@ -40,8 +41,8 @@ const Home: NextPage = () => {
             // Whether the Fertilizer system is being used
             ['Is Fertilizing?', 'isFertilizing', undefined, undefined, 'True if Beanstalk still owes beans to Fertilizer.'],
             // BPF indices
-            ['Current BPF', 'beansPerFertilizer'],
-            ['End BPF', 'getEndBpf', localeNumber(6), undefined, 'The current BPF at which'],
+            ['Current BPF', 'beansPerFertilizer', localeNumber(6), undefined, 'The current number of Beans paid per Fertilizer.'],
+            ['End BPF', 'getEndBpf', localeNumber(6), undefined, 'The BPF at which Fertilizer bought during this Season will stop receiving new Bean mints.'],
             // Amounts of Fertilizer, Beans, etc.
             ['Fertilized Beans', 'totalFertilizedBeans', localeNumber(6), undefined, 'Beans paid to Fertilizer.'],
             ['Unfertilized Beans', 'totalUnfertilizedBeans', localeNumber(6), undefined, 'Beans owed to Fertilizer.'],
@@ -56,10 +57,10 @@ const Home: NextPage = () => {
         <Module
           title="Unripe"
           slots={[
-            ['% Penalty (BEAN)', 'getPercentPenalty', undefined, [UNRIPE_BEAN]],
-            ['% Penalty (BEAN:3CRV)', 'getPercentPenalty', undefined, [UNRIPE_BEANCRV3]],
             ['Is Unripe? (BEAN)', 'isUnripe', undefined, [UNRIPE_BEAN]],
             ['Is Unripe? (BEAN:3CRV)', 'isUnripe', undefined, [UNRIPE_BEANCRV3]],
+            ['% Penalty (BEAN)', 'getPercentPenalty', undefined, [UNRIPE_BEAN]],
+            ['% Penalty (BEAN:3CRV)', 'getPercentPenalty', undefined, [UNRIPE_BEANCRV3]],
             ['Underlying per Unripe (BEAN)', 'getUnderlyingPerUnripeToken', localeNumber(6), [UNRIPE_BEAN]],
             ['Underlying per Unripe (BEAN:3CRV)', 'getUnderlyingPerUnripeToken', localeNumber(18), [UNRIPE_BEANCRV3]],
             ['Total Underlying (BEAN)', 'getTotalUnderlying', localeNumber(6), [UNRIPE_BEAN]],
@@ -94,6 +95,21 @@ const Home: NextPage = () => {
             ["Unripe Bean:3CRV", "bdv", localeNumber(6, 6), [UNRIPE_BEANCRV3, ethers.utils.parseUnits('1', 6)]],
           ]}
           raw={raw}
+        />
+        <Module
+          title="Convert"
+          slots={[
+            ["1 BEAN -> BEAN:3CRV",     "getAmountOut", localeNumber(18, 6), [BEAN, BEANCRV3, ethers.utils.parseUnits('1', 6)]],
+            ["1 urBEAN -> urBEAN:3CRV", "getAmountOut", localeNumber(6, 6),  [UNRIPE_BEAN, UNRIPE_BEANCRV3, ethers.utils.parseUnits('1', 6)]],
+            ["1 BEAN:3CRV -> BEAN",     "getAmountOut", localeNumber(6, 6),  [BEANCRV3, BEAN, ethers.utils.parseUnits('1', 18)]],
+            ["1 urBEAN:3CRV -> urBEAN", "getAmountOut", localeNumber(6, 6),  [UNRIPE_BEANCRV3, UNRIPE_BEAN, ethers.utils.parseUnits('1', 6)]],
+            ["Max: BEAN -> BEAN:3CRV",  "getMaxAmountIn",  localeNumber(6, 6),  [BEAN, BEANCRV3]],
+            ["Max: urBEAN -> urBEAN:3CRV",  "getMaxAmountIn",  localeNumber(6, 6),  [UNRIPE_BEAN, UNRIPE_BEANCRV3]],
+            ["Max: BEAN:3CRV -> BEAN",     "getMaxAmountIn", localeNumber(18, 6),  [BEANCRV3, BEAN]],
+            ["Max: urBEAN:3CRV -> urBEAN", "getMaxAmountIn", localeNumber(6, 6),  [UNRIPE_BEANCRV3, UNRIPE_BEAN]],
+          ]}
+          raw={raw}
+          multicall={false}
         />
       </div>
       <div className="px-2 py-2 border-t text-sm text-gray-600 border-gray-800 w-full">
