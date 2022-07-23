@@ -1,21 +1,22 @@
 import React, { useMemo, useState } from 'react';
 import type { NextPage } from 'next'
-import Module from '../components/Module';
+import CallsModule from '../components/CallsModule';
 import { ethers } from 'ethers';
+import Sunrises from '../components/Sunrises';
 
 const BEAN            = "0xBEA0000029AD1c77D3d5D23Ba2D8893dB9d1Efab";
 const BEANCRV3        = "0xc9C32cd16Bf7eFB85Ff14e0c8603cc90F6F2eE49";
 const UNRIPE_BEAN     = "0x1BEA0050E63e05FBb5D8BA2f10cf5800B6224449";
 const UNRIPE_BEANCRV3 = "0x1BEA3CcD22F4EBd3d37d731BA31Eeca95713716D";
 
+
+export const localeNumber = (decimals: number, maxFractionDigits?: number) => 
+  (v: ethers.BigNumber) => parseFloat(ethers.utils.formatUnits(v, decimals)).toLocaleString('en-us', { maximumFractionDigits: maxFractionDigits || 3 });
+export const percentNumber = (decimals: number) =>
+  (v: ethers.BigNumber) => `${(parseFloat(ethers.utils.formatUnits(v, decimals))*100).toFixed(4)}%`
+
 const Home: NextPage = () => {
   const [raw, setRaw] = useState(false);
-  const { localeNumber, percentNumber } = useMemo(() => ({
-    localeNumber: (decimals: number, maxFractionDigits?: number) => 
-      (v: ethers.BigNumber) => parseFloat(ethers.utils.formatUnits(v, decimals)).toLocaleString('en-us', { maximumFractionDigits: maxFractionDigits || 3 }),
-    percentNumber: (decimals: number) =>
-      (v: ethers.BigNumber) => `${(parseFloat(ethers.utils.formatUnits(v, decimals))*100).toFixed(4)}%`
-  }), [])
 
   return (
     <div className="bg-gray-900 h-screen text-white flex flex-col">
@@ -27,7 +28,7 @@ const Home: NextPage = () => {
         </div>
       </div>
       <div className="h-full overflow-scroll flex flex-col space-y-2 p-4">
-        <Module
+        <CallsModule
           title="Sun"
           slots={[
             ['Paused', 'paused'],
@@ -35,7 +36,7 @@ const Home: NextPage = () => {
           ]}
           raw={raw}
         />
-        <Module
+        <CallsModule
           title="Fertilizer"
           slots={[
             // Whether the Fertilizer system is being used
@@ -54,7 +55,7 @@ const Home: NextPage = () => {
           ]}
           raw={raw}
         />
-        <Module
+        <CallsModule
           title="Unripe"
           slots={[
             ['Is Unripe? (BEAN)', 'isUnripe', undefined, [UNRIPE_BEAN]],
@@ -68,14 +69,14 @@ const Home: NextPage = () => {
           ]}
           raw={raw}
         />
-        <Module
+        <CallsModule
           title="Silo"
           slots={[
             ["Withdraw Freeze", "withdrawFreeze"],
           ]}
           raw={raw}
         />
-        <Module
+        <CallsModule
           title="Field"
           slots={[
             ["Pods", "totalPods", localeNumber(6)],
@@ -86,7 +87,7 @@ const Home: NextPage = () => {
           ]}
           raw={raw}
         />
-        <Module
+        <CallsModule
           title="BDV"
           slots={[
             ["Beans", "bdv", localeNumber(6, 6), [BEAN, ethers.utils.parseUnits('1', 6)]],
@@ -96,7 +97,7 @@ const Home: NextPage = () => {
           ]}
           raw={raw}
         />
-        <Module
+        <CallsModule
           title="Convert"
           slots={[
             ["1 BEAN -> BEAN:3CRV",     "getAmountOut", localeNumber(18, 6), [BEAN, BEANCRV3, ethers.utils.parseUnits('1', 6)]],
@@ -111,6 +112,7 @@ const Home: NextPage = () => {
           raw={raw}
           multicall={false}
         />
+        <Sunrises />
       </div>
       <div className="px-2 py-2 border-t text-sm text-gray-600 border-gray-800 w-full">
         Connected to {process.env.NEXT_PUBLIC_RPC_URL || 'unknown'} ({process.env.NEXT_PUBLIC_CHAIN_ID || '?'})

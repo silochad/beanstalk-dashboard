@@ -56,7 +56,7 @@ const Slot = ({
   );
 }
 
-const Module : React.FC<{
+const CallsModule : React.FC<{
   title: string;
   slots: ModuleSlot[];
   raw?: boolean;
@@ -120,4 +120,4 @@ const Module : React.FC<{
   )
 }
 
-export default Module;
+export default CallsModule;
