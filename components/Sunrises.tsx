@@ -89,8 +89,7 @@ export default function Sunrises() {
         contracts.beanstalk.season(),
         provider.getBlockNumber(),
       ]);
-      const blocksBack =  blockNumber - (NUM_SEASONS + 1) * AVG_BLOCKS_PER_HOUR;
-
+      // const blocksBack =  blockNumber - (NUM_SEASONS + 1) * AVG_BLOCKS_PER_HOUR;
       const seasonsToQuery = Array(NUM_SEASONS).fill(0).map((_, index) => season - index);
       const filters = (name: SeasonEventNames) => {
         return seasonsToQuery.map(
@@ -107,15 +106,11 @@ export default function Sunrises() {
         ...filters('Reward'),
         ...filters('Soil'),
       ]);
-
-      console.debug(seasonsToQuery, queries)
-
       const seasons : Seasons = {};
       const flattened = flatten<TypedEvent<any, { season: number | ethers.BigNumber }>>(queries);
 
       flattened.forEach((event) => {
         const s = event.args?.season?.toString();
-        console.debug(event)
         if (s) {
           if (!seasons[s]) seasons[s] = {};
           seasons[s][event.event || 'Unknown'] = event.args;
@@ -126,22 +121,20 @@ export default function Sunrises() {
     })();
   }, [])
   return (
-    <div>
-      <div className="border border-gray-400 max-w-sm">
-        <h2 className="border-b border-gray-400 bg-gray-700 px-2 py-1 font-bold">
-          Sunrises
-        </h2>
-        {eventsBySeason ? Object.keys(eventsBySeason).sort((a, b) => parseInt(b) - parseInt(a)).map(season => {
-          const events = eventsBySeason[season];
-          return (
-            <Sunrise
-              key={season}
-              season={season}
-              events={events}
-            />
-          )
-        }) : null}
-      </div>
+    <div className="border border-gray-400 max-w-sm">
+      <h2 className="border-b border-gray-400 bg-gray-700 px-2 py-1 font-bold">
+        Sunrises
+      </h2>
+      {eventsBySeason ? Object.keys(eventsBySeason).sort((a, b) => parseInt(b) - parseInt(a)).map(season => {
+        const events = eventsBySeason[season];
+        return (
+          <Sunrise
+            key={season}
+            season={season}
+            events={events}
+          />
+        )
+      }) : null}
     </div>
   )
 }

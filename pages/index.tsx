@@ -3,6 +3,7 @@ import type { NextPage } from 'next'
 import CallsModule from '../components/CallsModule';
 import { ethers } from 'ethers';
 import Sunrises from '../components/Sunrises';
+import FertQueue from '../components/FertQueue';
 
 const BEAN            = "0xBEA0000029AD1c77D3d5D23Ba2D8893dB9d1Efab";
 const BEANCRV3        = "0xc9C32cd16Bf7eFB85Ff14e0c8603cc90F6F2eE49";
@@ -40,41 +41,6 @@ const Home: NextPage = () => {
             raw={raw}
           />
           <Sunrises />
-        </div>
-        <div className={COL_ITEM}>
-          <CallsModule
-            title="Fertilizer"
-            slots={[
-              // Whether the Fertilizer system is being used
-              ['Is Fertilizing?', 'isFertilizing', undefined, undefined, 'True if Beanstalk still owes beans to Fertilizer.'],
-              // BPF indices
-              ['Current BPF', 'beansPerFertilizer', localeNumber(6), undefined, 'The current number of Beans paid per Fertilizer.'],
-              ['End BPF', 'getEndBpf', localeNumber(6), undefined, 'The BPF at which Fertilizer bought during this Season will stop receiving new Bean mints.'],
-              // Amounts of Fertilizer, Beans, etc.
-              ['Fertilized Beans', 'totalFertilizedBeans', localeNumber(6), undefined, 'Beans paid to Fertilizer.'],
-              ['Unfertilized Beans', 'totalUnfertilizedBeans', localeNumber(6), undefined, 'Beans owed to Fertilizer.'],
-              ['Fertilized + Unfertilized Beans', 'totalFertilizerBeans', localeNumber(6), undefined, 'Fertilized Beans + Unfertilized Beans'],
-              ['Active Fertilizer', 'getActiveFertilizer', localeNumber(0), undefined, 'The number of Fertilizer currently receiving Bean mints.'],
-              // Recapitalization Progress
-              ['Remaining Recap', 'remainingRecapitalization', localeNumber(6), undefined, 'The number of USDC remaining to be raised. 1 USDC can purchase 1 FERT.'], // measured in USDC
-              ['Recap Paid Percent', 'getRecapPaidPercent', percentNumber(6)],
-            ]}
-            raw={raw}
-          />
-          <CallsModule
-            title="Unripe"
-            slots={[
-              ['Is Unripe? (BEAN)', 'isUnripe', undefined, [UNRIPE_BEAN]],
-              ['Is Unripe? (BEAN:3CRV)', 'isUnripe', undefined, [UNRIPE_BEANCRV3]],
-              ['% Penalty (BEAN)', 'getPercentPenalty', undefined, [UNRIPE_BEAN]],
-              ['% Penalty (BEAN:3CRV)', 'getPercentPenalty', undefined, [UNRIPE_BEANCRV3]],
-              ['Underlying per Unripe (BEAN)', 'getUnderlyingPerUnripeToken', localeNumber(6), [UNRIPE_BEAN]],
-              ['Underlying per Unripe (BEAN:3CRV)', 'getUnderlyingPerUnripeToken', localeNumber(18), [UNRIPE_BEANCRV3]],
-              ['Total Underlying (BEAN)', 'getTotalUnderlying', localeNumber(6), [UNRIPE_BEAN]],
-              ['Total Underlying (BEAN:3CRV)', 'getTotalUnderlying', localeNumber(18), [UNRIPE_BEANCRV3]],
-            ]}
-            raw={raw}
-          />
         </div>
         <div className={COL_ITEM}>
           <CallsModule
@@ -122,6 +88,44 @@ const Home: NextPage = () => {
             ]}
             raw={raw}
           />
+        </div>
+        <div className={COL_ITEM}>
+          <CallsModule
+            title="Fertilizer"
+            slots={[
+              // Whether the Fertilizer system is being used
+              ['Is Fertilizing?', 'isFertilizing', undefined, undefined, 'True if Beanstalk still owes beans to Fertilizer.'],
+              // BPF indices
+              ['Current BPF', 'beansPerFertilizer', localeNumber(6), undefined, 'The current number of Beans paid per Fertilizer.'],
+              ['End BPF', 'getEndBpf', localeNumber(6), undefined, 'The BPF at which Fertilizer bought during this Season will stop receiving new Bean mints.'],
+              // Amounts of Fertilizer, Beans, etc.
+              ['Fertilized Beans', 'totalFertilizedBeans', localeNumber(6), undefined, 'Beans paid to Fertilizer.'],
+              ['Unfertilized Beans', 'totalUnfertilizedBeans', localeNumber(6), undefined, 'Beans owed to Fertilizer.'],
+              ['Fertilized + Unfertilized Beans', 'totalFertilizerBeans', localeNumber(6), undefined, 'Fertilized Beans + Unfertilized Beans'],
+              ['Active Fertilizer', 'getActiveFertilizer', localeNumber(0), undefined, 'The number of Fertilizer currently receiving Bean mints.'],
+              // Recapitalization Progress
+              ['Remaining Recap', 'remainingRecapitalization', localeNumber(6), undefined, 'The number of USDC remaining to be raised. 1 USDC can purchase 1 FERT.'], // measured in USDC
+              ['Recap Paid Percent', 'getRecapPaidPercent', percentNumber(6)],
+            ]}
+            raw={raw}
+          />
+          <CallsModule
+            title="Unripe"
+            slots={[
+              ['Is Unripe? (BEAN)', 'isUnripe', undefined, [UNRIPE_BEAN]],
+              ['Is Unripe? (BEAN:3CRV)', 'isUnripe', undefined, [UNRIPE_BEANCRV3]],
+              ['% Penalty (BEAN)', 'getPercentPenalty', undefined, [UNRIPE_BEAN]],
+              ['% Penalty (BEAN:3CRV)', 'getPercentPenalty', undefined, [UNRIPE_BEANCRV3]],
+              ['Underlying per Unripe (BEAN)', 'getUnderlyingPerUnripeToken', localeNumber(6), [UNRIPE_BEAN]],
+              ['Underlying per Unripe (BEAN:3CRV)', 'getUnderlyingPerUnripeToken', localeNumber(18), [UNRIPE_BEANCRV3]],
+              ['Total Underlying (BEAN)', 'getTotalUnderlying', localeNumber(6), [UNRIPE_BEAN]],
+              ['Total Underlying (BEAN:3CRV)', 'getTotalUnderlying', localeNumber(18), [UNRIPE_BEANCRV3]],
+            ]}
+            raw={raw}
+          />
+        </div>
+        <div className={COL_ITEM}>
+          <FertQueue />
         </div>
       </div>
       <div className="px-2 py-2 border-t text-sm text-gray-600 border-gray-800 w-full">
