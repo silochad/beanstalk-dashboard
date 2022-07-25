@@ -48,7 +48,7 @@ const Slot = ({
         if (dTypeResult === 'string') {
           // string display
           content = (
-            <span>{parsedResult}</span>
+            <span>{parsedResult as string}</span>
           )
         } else if (dTypeResult === 'object') {
           // object display
@@ -62,12 +62,12 @@ const Slot = ({
           /// element display
           displayMode = 'column';
           content = (
-            <div>{parsedResult}</div>
+            <div>{parsedResult as JSX.Element}</div>
           );
         } else {
           /// string display
           content = (
-            <div>{parsedResult}</div>
+            <div>{parsedResult as string}</div>
           );
         }
       } else {
