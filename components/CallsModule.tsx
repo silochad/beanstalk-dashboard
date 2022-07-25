@@ -30,7 +30,7 @@ const Slot = ({
   const [name, method, parseResult, args, desc] = slot;
   return (
     <>
-      <div className="flex flex-row justify-between items-center px-2 py-1 cursor-pointer hover:bg-gray-800" onClick={() => setExp(!exp)}>
+      <div className="flex flex-row justify-between items-center px-2 py-1 gap-2 cursor-pointer hover:bg-gray-800" onClick={() => setExp(!exp)}>
         <span>{name}</span>
         {data ? (
           <span>

@@ -19,61 +19,63 @@ const none = <em>None</em>
 export function Sunrise({ season, events } : { season: string, events: Seasons[string] }) {
   const [exp, setExp] = useState(false);
   return (
-    <div key={season} className="border-gray-400 border-b p-1 cursor-pointer" onClick={() => setExp(!exp)}>
+    <div key={season} className="border-gray-400 border-b px-2 py-1 hover:bg-gray-800 cursor-pointer" onClick={() => setExp(!exp)}>
       Sunrise #{season.toString()}
-      <div className="ml-2 space-y-2">
-        {/* Event: MetapoolOracle */}
-        <div>
-          <h2 className="font-bold">MetapoolOracle</h2>
-          {events['MetapoolOracle'] ? (
-            <>
-              <div>deltaB: {ethers.utils.formatUnits(events['MetapoolOracle'].deltaB || '0', 6)}</div>
-              <div>balances: {events['MetapoolOracle']?.balances.map((b: any, i: number) => <div key={i} className="ml-2">{i} = {b.toString()}</div>) || '0'}</div>
-            </>
-          ) : none}
-        </div>
-        {/* Event: WeatherChange */}
-        <div>
-          <h2 className="font-bold">WeatherChange</h2>
-          {events['WeatherChange'] ? (
-            <>
-              <div>caseId: {events['WeatherChange'].caseId.toString()}</div>
-              <div>change: {events['WeatherChange'].change.toString()}</div>
-            </>
-          ) : none}
-        </div>
-        {/* Event: SeasonOfPlenty */}
-        {events['SeasonOfPlenty'] ? (
+      {exp && (
+        <div className="ml-2 mt-1 space-y-2 text-sm">
+          {/* Event: MetapoolOracle */}
           <div>
-            <h2 className="font-bold">SeasonOfPlenty</h2>
-            <div>amount: {events['SeasonOfPlenty'].amount.toString()}</div>
-            <div>toField: {events['SeasonOfPlenty'].toField.toString()}</div>
+            <h2 className="font-bold">MetapoolOracle</h2>
+            {events['MetapoolOracle'] ? (
+              <div className="ml-2">
+                <div>deltaB: {ethers.utils.formatUnits(events['MetapoolOracle'].deltaB || '0', 6)}</div>
+                <div>balances: {events['MetapoolOracle']?.balances.map((b: any, i: number) => <div key={i} className="ml-2">{i} = {b.toString()}</div>) || '0'}</div>
+              </div>
+            ) : none}
           </div>
-        ) : null}
-        {/* Event: Reward */}
-        <div>
-          <h2 className="font-bold">Reward</h2>
-          {events['Reward'] ? (
-            <>
-              <div>toField: {ethers.utils.formatUnits(events['Reward']?.toField || '0', 6)}</div>
-              <div>toSilo: {ethers.utils.formatUnits(events['Reward']?.toSilo || '0', 6)}</div>
-              <div>toFertilizer: {ethers.utils.formatUnits(events['Reward']?.toFertilizer || '0', 6)}</div>
-            </>
-          ) : none}
+          {/* Event: WeatherChange */}
+          <div>
+            <h2 className="font-bold">WeatherChange</h2>
+            {events['WeatherChange'] ? (
+              <div className="ml-2">
+                <div>caseId: {events['WeatherChange'].caseId.toString()}</div>
+                <div>change: {events['WeatherChange'].change.toString()}</div>
+              </div>
+            ) : none}
+          </div>
+          {/* Event: SeasonOfPlenty */}
+          {events['SeasonOfPlenty'] ? (
+            <div className="ml-2">
+              <h2 className="font-bold">SeasonOfPlenty</h2>
+              <div>amount: {events['SeasonOfPlenty'].amount.toString()}</div>
+              <div>toField: {events['SeasonOfPlenty'].toField.toString()}</div>
+            </div>
+          ) : null}
+          {/* Event: Reward */}
+          <div>
+            <h2 className="font-bold">Reward</h2>
+            {events['Reward'] ? (
+              <div className="ml-2">
+                <div>toField: {ethers.utils.formatUnits(events['Reward']?.toField || '0', 6)}</div>
+                <div>toSilo: {ethers.utils.formatUnits(events['Reward']?.toSilo || '0', 6)}</div>
+                <div>toFertilizer: {ethers.utils.formatUnits(events['Reward']?.toFertilizer || '0', 6)}</div>
+              </div>
+            ) : none}
+          </div>
+          {/* Event: Soil */}
+          <div>
+            <h2 className="font-bold">Soil</h2>
+            {events['Soil'] ? (
+              <div className="ml-2">
+                <div>soil: {ethers.utils.formatUnits(events['Soil']?.soil || '0', 6)}</div>
+              </div>
+            ) : none}
+          </div>
         </div>
-        {/* Event: Soil */}
-        <div>
-          <h2 className="font-bold">Soil</h2>
-          {events['Soil'] ? (
-            <>
-              <div>soil: {ethers.utils.formatUnits(events['Soil']?.soil || '0', 6)}</div>
-            </>
-          ) : none}
-        </div>
-      </div>
-      <div>
+      )}
+      {/* <div>
         {exp && <pre>{JSON.stringify(events, null, 2)}</pre>}
-      </div>
+      </div> */}
     </div>
   )
 }
