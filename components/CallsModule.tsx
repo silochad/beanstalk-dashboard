@@ -9,7 +9,7 @@ import { ethers } from 'ethers';
 type ModuleSlot = [
   name: string,
   method: (keyof Beanstalk['functions']),
-  parseResult?: (value: any) => string | JSX.Element,
+  parseResult?: (value: any) => string | object | JSX.Element,
   args?: any[],
   desc?: string,
 ];
@@ -28,23 +28,66 @@ const Slot = ({
   /** expanded? */
   const [exp, setExp] = useState(false);
   const [name, method, parseResult, args, desc] = slot;
+
+  ///
+  let content;
+  let displayMode : 'column' | 'row' = 'row';
+  if (data && data[index]) {
+    const dType = typeof data[index];
+    if (raw) {
+      let displayMode = dType === 'object' ? 'column' : 'row';
+      content = (
+        <div className="text-xs">
+          <pre>{JSON.stringify(data[index].toString(), null, 2)}</pre>
+        </div>
+      );
+    } else {
+      if (parseResult) {
+        let parsedResult = parseResult(data[index]);
+        let dTypeResult  = typeof parsedResult;
+        if (dTypeResult === 'string') {
+          // string display
+          content = (
+            <span>{parsedResult}</span>
+          )
+        } else if (dTypeResult === 'object') {
+          // object display
+          displayMode = 'column';
+          content = (
+            <div className="text-xs">
+              <pre>{JSON.stringify(parsedResult, null, 2)}</pre>
+            </div>
+          )
+        } else if (dTypeResult === 'function') {
+          /// element display
+          displayMode = 'column';
+          content = (
+            <div>{parsedResult}</div>
+          );
+        } else {
+          /// string display
+          content = (
+            <div>{parsedResult}</div>
+          );
+        }
+      } else {
+        // no parseResult provided
+        content = (
+          <span>{data[index].toString()}</span>
+        );
+      }
+    }
+  }
+
+  const cls = displayMode === 'row' 
+    ? `flex-row justify-between items-center`
+    : `flex-col`
+
   return (
     <>
-      <div className="flex flex-row justify-between items-center px-2 py-1 gap-2 cursor-pointer hover:bg-gray-800" onClick={() => setExp(!exp)}>
+      <div className={`flex ${cls} px-2 py-1 gap-2 cursor-pointer hover:bg-gray-800`} onClick={() => setExp(!exp)}>
         <span>{name}</span>
-        {data ? (
-          <span>
-            {raw ? (
-              <pre>{JSON.stringify(data[index].toString(), null, 2)}</pre>
-            ) : (
-              data[index] ?
-                parseResult
-                  ? parseResult(data[index])
-                  : data[index].toString()
-                : '?'
-            )}
-          </span>
-        ) : null}
+        {content}
       </div>
       {exp && (
         <div className="px-2 text-gray-400 text-sm break-words pb-2">

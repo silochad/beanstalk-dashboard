@@ -4,6 +4,7 @@ import CallsModule from '../components/CallsModule';
 import { ethers } from 'ethers';
 import Sunrises from '../components/Sunrises';
 import FertQueue from '../components/FertQueue';
+import { Storage } from '../generated/Beanstalk'; 
 
 const BEAN            = "0xBEA0000029AD1c77D3d5D23Ba2D8893dB9d1Efab";
 const BEANCRV3        = "0xc9C32cd16Bf7eFB85Ff14e0c8603cc90F6F2eE49";
@@ -77,6 +78,24 @@ const Home: NextPage = () => {
           />
         </div>
         <div className={COL_ITEM}>
+          <CallsModule
+            title="Field"
+            slots={[
+              ["Pods", "totalPods", localeNumber(6)],
+              ["Soil", "totalSoil", localeNumber(6)],
+              ["Temperature", "yield", percentNumber(2)],
+              ["Harvested Pods", "totalHarvested", localeNumber(6)],
+              ["Harvestable Index", "harvestableIndex", localeNumber(6)],
+              ["Weather", "weather", (value: Storage.WeatherStructOutput) => ({
+                startSoil: value.startSoil.toString(),
+                lastDSoil: value.lastDSoil.toString(),
+                lastSowTime: value.lastSowTime.toString(),
+                nextSowTime: value.nextSowTime.toString(),
+                yield: value.yield.toString(),
+              })]
+            ]}
+            raw={raw}
+          />
           <CallsModule
             title="Field"
             slots={[
