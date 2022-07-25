@@ -55,7 +55,8 @@ export default function Sunrises() {
                 New Season: {events['Sunrise']?.toString() || 'Unknown'}<br/>
                 To Field: {ethers.utils.formatUnits(events['Reward']?.toField || '0', 6)}<br/>
                 To Silo: {ethers.utils.formatUnits(events['Reward']?.toSilo || '0', 6)}<br/>
-                To Fertilizer: {ethers.utils.formatUnits(events['Reward']?.toFertilizer || '0', 6)}
+                To Fertilizer: {ethers.utils.formatUnits(events['Reward']?.toFertilizer || '0', 6)}<br/>
+                <pre>{JSON.stringify(events, null, 2)}</pre>
               </div>
             </div>
           )
