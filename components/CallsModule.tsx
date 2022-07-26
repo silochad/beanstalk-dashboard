@@ -55,7 +55,7 @@ const Slot = ({
           displayMode = 'column';
           content = (
             <div className="text-xs">
-              <pre>{JSON.stringify(parsedResult, null, 2)}</pre>
+              <pre>{Object.entries(parsedResult).reduce((acc, [key, value]) => acc + `${key}: ${value}\n`, "")}</pre>
             </div>
           )
         } else if (dTypeResult === 'function') {

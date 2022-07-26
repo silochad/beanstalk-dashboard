@@ -146,6 +146,25 @@ const Home: NextPage = () => {
         <div className={COL_ITEM}>
           <FertQueue />
         </div>
+        <div className={COL_ITEM}>
+          <CallsModule
+            title="Season of Plenty"
+            slots={[
+              ["Rain", "rain", (value: Storage.RainStructOutput) => ({
+                roots: localeNumber(12)(value.roots).toString(),
+                pods: localeNumber(6)(value.pods).toString()
+              })],
+              ["Seasons", "time", (value: Storage.SeasonStructOutput) => ({
+                lastSopStart: value.lastSop.toString(),
+                lastSopEnd: value.lastSopSeason.toString(),
+                rainStart: value.rainStart.toString(),
+                raining: value.raining.toString(),
+                sopTime: (value.withdrawSeasons + 1).toString()
+              })]
+            ]}
+            raw={raw}
+          />
+        </div>
       </div>
       <div className="px-2 py-2 border-t text-sm text-gray-600 border-gray-800 w-full">
         Connected to {process.env.NEXT_PUBLIC_RPC_URL || 'unknown'} ({process.env.NEXT_PUBLIC_CHAIN_ID || '?'})
