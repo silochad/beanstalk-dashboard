@@ -133,12 +133,19 @@ const Home: NextPage = () => {
             slots={[
               ['Is Unripe? (BEAN)', 'isUnripe', undefined, [UNRIPE_BEAN]],
               ['Is Unripe? (BEAN:3CRV)', 'isUnripe', undefined, [UNRIPE_BEANCRV3]],
-              ['% Penalty (BEAN)', 'getPercentPenalty', undefined, [UNRIPE_BEAN]],
-              ['% Penalty (BEAN:3CRV)', 'getPercentPenalty', undefined, [UNRIPE_BEANCRV3]],
-              ['Underlying per Unripe (BEAN)', 'getUnderlyingPerUnripeToken', localeNumber(6), [UNRIPE_BEAN]],
-              ['Underlying per Unripe (BEAN:3CRV)', 'getUnderlyingPerUnripeToken', localeNumber(18), [UNRIPE_BEANCRV3]],
               ['Total Underlying (BEAN)', 'getTotalUnderlying', localeNumber(6), [UNRIPE_BEAN]],
               ['Total Underlying (BEAN:3CRV)', 'getTotalUnderlying', localeNumber(18), [UNRIPE_BEANCRV3]],
+              ['% of Sprouts Fertilized', 'getRecapPaidPercent', percentNumber(6)],
+              ["Underlying Per Unripe----------", 'isUnripe', undefined, [UNRIPE_BEAN]],
+              ['Penalized Underlying per Unripe (BEAN)', 'getPenalty', localeNumber(6), [UNRIPE_BEAN]],
+              ['Penalized Underlying per Unripe (BEAN:3CRV)', 'getPenalty', localeNumber(18), [UNRIPE_BEANCRV3]],
+              ['Underlying per Unripe (BEAN)', 'getUnderlyingPerUnripeToken', localeNumber(6), [UNRIPE_BEAN]],
+              ['Underlying per Unripe (BEAN:3CRV)', 'getUnderlyingPerUnripeToken', localeNumber(18), [UNRIPE_BEANCRV3]],
+              ["Chop Rate-------------", 'isUnripe', undefined, [UNRIPE_BEAN]],
+              ['Chop Rate (BEAN)', 'getPercentPenalty', percentNumber(6), [UNRIPE_BEAN]],
+              ['Chop Rate (BEAN:3CRV)', 'getPercentPenalty', percentNumber(6), [UNRIPE_BEANCRV3]],
+              ['% Recapitalized (BEAN)', 'getRecapFundedPercent', percentNumber(6), [UNRIPE_BEAN]],
+              ['% Recapitalized (BEAN:3CRV)', 'getRecapFundedPercent', percentNumber(6), [UNRIPE_BEANCRV3]],
             ]}
             raw={raw}
           />
