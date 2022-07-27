@@ -43,21 +43,36 @@ const Home: NextPage = () => {
       </div>
       <div className={COL_ITEM}>
         <CallsModule
-          title="Season of Plenty"
+          title="Silo"
           slots={[
-            ["Rain", "rain", (value: Storage.RainStructOutput) => ({
-              pods: localeNumber(6)(value.pods).toString(),
-              roots: localeNumber(12)(value.roots).toString(),
-            })],
-            ["Seasons", "time", (value: Storage.SeasonStructOutput) => ({
-              lastSopStart: value.lastSop.toString(),
-              rainStart: value.rainStart.toString(),
-              raining: value.raining.toString(),
-              lastSopEnd: value.lastSopSeason.toString(),
-              sopTime: (value.withdrawSeasons + 1).toString()
-            })]
+            ["Withdraw Freeze", "withdrawFreeze"],
           ]}
           raw={raw}
+        />
+        <CallsModule
+          title="BDV"
+          slots={[
+            ["Beans", "bdv", localeNumber(6, 6), [BEAN, ethers.utils.parseUnits('1', 6)]],
+            ["Bean:3CRV", "bdv", localeNumber(6, 6), [BEANCRV3, ethers.utils.parseUnits('1', 18)]],
+            ["Unripe Beans", "bdv", localeNumber(6, 6), [UNRIPE_BEAN, ethers.utils.parseUnits('1', 6)]],
+            ["Unripe Bean:3CRV", "bdv", localeNumber(6, 6), [UNRIPE_BEANCRV3, ethers.utils.parseUnits('1', 6)]],
+          ]}
+          raw={raw}
+        />
+        <CallsModule
+          title="Convert"
+          slots={[
+            ["1 BEAN -> BEAN:3CRV",     "getAmountOut", localeNumber(18, 6), [BEAN, BEANCRV3, ethers.utils.parseUnits('1', 6)]],
+            ["1 urBEAN -> urBEAN:3CRV", "getAmountOut", localeNumber(6, 6),  [UNRIPE_BEAN, UNRIPE_BEANCRV3, ethers.utils.parseUnits('1', 6)]],
+            ["1 BEAN:3CRV -> BEAN",     "getAmountOut", localeNumber(6, 6),  [BEANCRV3, BEAN, ethers.utils.parseUnits('1', 18)]],
+            ["1 urBEAN:3CRV -> urBEAN", "getAmountOut", localeNumber(6, 6),  [UNRIPE_BEANCRV3, UNRIPE_BEAN, ethers.utils.parseUnits('1', 6)]],
+            ["Max: BEAN -> BEAN:3CRV",  "getMaxAmountIn",  localeNumber(6, 6),  [BEAN, BEANCRV3]],
+            ["Max: urBEAN -> urBEAN:3CRV",  "getMaxAmountIn",  localeNumber(6, 6),  [UNRIPE_BEAN, UNRIPE_BEANCRV3]],
+            ["Max: BEAN:3CRV -> BEAN",     "getMaxAmountIn", localeNumber(18, 6),  [BEANCRV3, BEAN]],
+            ["Max: urBEAN:3CRV -> urBEAN", "getMaxAmountIn", localeNumber(6, 6),  [UNRIPE_BEANCRV3, UNRIPE_BEAN]],
+          ]}
+          raw={raw}
+          multicall={false}
         />
       </div>
       <div className={COL_ITEM}>
@@ -100,8 +115,8 @@ const Home: NextPage = () => {
             // BPF indices
             ['Current BPF', 'beansPerFertilizer', localeNumber(6), undefined, 'The current number of Beans paid per Fertilizer.'],
             ['End BPF', 'getEndBpf', localeNumber(6), undefined, 'The BPF at which Fertilizer bought during this Season will stop receiving new Bean mints.'],
-            ['Fertilized Beans', 'totalFertilizedBeans', localeNumber(6), undefined, 'Beans paid to Fertilizer.'],
             // Amounts of Fertilizer, Beans, etc.
+            ['Fertilized Beans', 'totalFertilizedBeans', localeNumber(6), undefined, 'Beans paid to Fertilizer.'],
             ['Unfertilized Beans', 'totalUnfertilizedBeans', localeNumber(6), undefined, 'Beans owed to Fertilizer.'],
             ['Fertilized + Unfertilized Beans', 'totalFertilizerBeans', localeNumber(6), undefined, 'Fertilized Beans + Unfertilized Beans'],
             ['Active Fertilizer', 'getActiveFertilizer', localeNumber(0), undefined, 'The number of Fertilizer currently receiving Bean mints.'],
@@ -118,16 +133,16 @@ const Home: NextPage = () => {
             ['Is Unripe? (BEAN:3CRV)', 'isUnripe', undefined, [UNRIPE_BEANCRV3]],
             ['Total Underlying (BEAN)', 'getTotalUnderlying', localeNumber(6), [UNRIPE_BEAN]],
             ['Total Underlying (BEAN:3CRV)', 'getTotalUnderlying', localeNumber(18), [UNRIPE_BEANCRV3]],
-            ["Underlying Per Unripe----------", 'isUnripe', undefined, [UNRIPE_BEAN]],
             ['% of Sprouts Fertilized', 'getRecapPaidPercent', percentNumber(6)],
+            ["Underlying Per Unripe----------", 'isUnripe', undefined, [UNRIPE_BEAN]],
             ['Penalized Underlying per Unripe (BEAN)', 'getPenalty', localeNumber(6), [UNRIPE_BEAN]],
             ['Penalized Underlying per Unripe (BEAN:3CRV)', 'getPenalty', localeNumber(18), [UNRIPE_BEANCRV3]],
-            ['Underlying per Unripe (BEAN:3CRV)', 'getUnderlyingPerUnripeToken', localeNumber(18), [UNRIPE_BEANCRV3]],
             ['Underlying per Unripe (BEAN)', 'getUnderlyingPerUnripeToken', localeNumber(6), [UNRIPE_BEAN]],
+            ['Underlying per Unripe (BEAN:3CRV)', 'getUnderlyingPerUnripeToken', localeNumber(18), [UNRIPE_BEANCRV3]],
             ["Chop Rate-------------", 'isUnripe', undefined, [UNRIPE_BEAN]],
             ['Chop Rate (BEAN)', 'getPercentPenalty', percentNumber(6), [UNRIPE_BEAN]],
-            ['% Recapitalized (BEAN)', 'getRecapFundedPercent', percentNumber(6), [UNRIPE_BEAN]],
             ['Chop Rate (BEAN:3CRV)', 'getPercentPenalty', percentNumber(6), [UNRIPE_BEANCRV3]],
+            ['% Recapitalized (BEAN)', 'getRecapFundedPercent', percentNumber(6), [UNRIPE_BEAN]],
             ['% Recapitalized (BEAN:3CRV)', 'getRecapFundedPercent', percentNumber(6), [UNRIPE_BEANCRV3]],
           ]}
           raw={raw}
@@ -135,6 +150,25 @@ const Home: NextPage = () => {
       </div>
       <div className={COL_ITEM}>
         <FertQueue />
+      </div>
+      <div className={COL_ITEM}>
+        <CallsModule
+          title="Season of Plenty"
+          slots={[
+            ["Rain", "rain", (value: Storage.RainStructOutput) => ({
+              roots: localeNumber(12)(value.roots).toString(),
+              pods: localeNumber(6)(value.pods).toString()
+            })],
+            ["Seasons", "time", (value: Storage.SeasonStructOutput) => ({
+              lastSopStart: value.lastSop.toString(),
+              lastSopEnd: value.lastSopSeason.toString(),
+              rainStart: value.rainStart.toString(),
+              raining: value.raining.toString(),
+              sopTime: (value.withdrawSeasons + 1).toString()
+            })]
+          ]}
+          raw={raw}
+        />
       </div>
     </Page>
   )
