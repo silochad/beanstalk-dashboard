@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from 'react';
+import { Contract } from 'ethers-multicall';
+import { ethers } from 'ethers';
 
 import contracts from '../lib/contracts';
 import { Beanstalk } from '../generated';
 import { ethcallProvider } from '../lib/provider';
-import { Contract } from 'ethers-multicall';
-import { ethers } from 'ethers';
+import Module from './Module';
 
 type ModuleSlot = [
   name: string,
@@ -146,20 +147,17 @@ const CallsModule : React.FC<{
     })()
   }, [multicall, slots])
   return (
-    <div>
-      <div className="border border-gray-400 max-w-sm">
-        <h2 className="border-b border-gray-400 bg-gray-700 px-2 py-1 font-bold">{title}</h2>
-        {slots.map((slot, index) => (
-          <Slot
-            key={index}
-            index={index}
-            slot={slot}
-            data={data}
-            raw={raw}
-          />
-        ))}
-      </div>
-    </div>
+    <Module title={title}>
+      {slots.map((slot, index) => (
+        <Slot
+          key={index}
+          index={index}
+          slot={slot}
+          data={data}
+          raw={raw}
+        />
+      ))}
+    </Module>
   )
 }
 
