@@ -5,8 +5,9 @@ Create a new file `.env.local` and configure with your desired chain / RPC URL:
 ```
 NEXT_PUBLIC_CHAIN_ID=1337
 NEXT_PUBLIC_RPC_URL=http://localhost:8545
-NEXT_PUBLIC_RPC_WS_URL=ws://localhost:8545 # if your local RPC supports websockets (hardhat and anvil do)
+NEXT_PUBLIC_RPC_WS_URL=ws://localhost:8545
 ```
+set NEXT_PUBLIC_RPC_WS_URL if your local RPC supports websockets (hardhat and anvil do)
 ```
 yarn install
 yarn generate
