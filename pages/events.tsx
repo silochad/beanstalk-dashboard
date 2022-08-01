@@ -5,21 +5,18 @@ import Page from "../components/layout/Page"
 import omit from 'lodash/omit'
 import Module from "../components/Module"
 import { Beanstalk__factory } from "../generated";
-import { TypedEvent, TypedListener } from '../generated/common';
+import { TypedEvent } from '../generated/common';
 import contracts from "../lib/contracts"
-import { wsProvider } from "../lib/provider";
 import { parseArgs } from "../lib/utils";
-
-/*.sort((a: TypedEvent, b: TypedEvent) => {
-          // newest first
-          const diff = 1 * (b.blockNumber - a.blockNumber);
-          if (diff !== 0) return diff;
-          return 1 * (b.logIndex - a.logIndex);
-        })*/
+import { chainId } from "../lib/provider";
 
 const activateListeners = (
   handler: (event: TypedEvent<any>
 ) => void) => {
+  const wsProvider = new ethers.providers.WebSocketProvider(
+    process.env.NEXT_PUBLIC_RPC_WS_URL || '',
+    { name: 'Unknown', chainId }
+  )
   const _beanstalk = Beanstalk__factory.connect(contracts.beanstalk.address, wsProvider)
   const filters : (keyof typeof _beanstalk.filters)[] = [
     /// Sun

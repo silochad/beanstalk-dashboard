@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from 'react';
+import React, { useState } from 'react';
 import type { NextPage } from 'next'
 import CallsModule from '../components/CallsModule';
 import { ethers } from 'ethers';
