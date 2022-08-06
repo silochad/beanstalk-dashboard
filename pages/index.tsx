@@ -36,10 +36,18 @@ const Home: NextPage = () => {
           slots={[
             ['Paused', 'paused'],
             ['Season', 'season'],
+            ['Season Time', 'seasonTime'],
           ]}
           raw={raw}
         />
         <Sunrises />
+        <CallsModule
+          title="Owner"
+          slots={[
+            ['Owner', 'owner', (owner) => `${owner.substring(0,15)}...`],
+          ]}
+          raw={raw}
+        />
       </div>
       <div className={COL_ITEM}>
         <CallsModule
