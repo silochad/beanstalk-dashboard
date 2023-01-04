@@ -7,7 +7,8 @@ import Page from '../components/layout/Page';
 const SUBGRAPHS = [
   `https://graph.node.bean.money/subgraphs/name/beanstalk`,
   `https://graph.node.bean.money/subgraphs/name/beanstalk-dev`,
-  `https://graph.node.bean.money/subgraphs/name/beanstalk-testing`
+  `https://graph.node.bean.money/subgraphs/name/beanstalk-testing`,
+  `https://graph.node.bean.money/subgraphs/name/beanstalk-2-1-0`
 ]
 
 const checkSubgraphStatus = async (url: string) => {
@@ -66,6 +67,7 @@ const Subgraph : React.FC<{ url: string, latestBlockNumberNetwork?: number }> = 
       <td>{data?._meta.hasIndexingErrors.toString() || '-'}</td>
       <td>{data?.beanstalk.lastSeason || '-'}</td>
       <td>{data?.beanstalk.subgraphVersion || '-'}</td>
+      <td className="text-xs">{data?._meta.deployment || '-'}</td>
       <td>{loading ? 'loading...' : null}</td>
     </tr>
   )
@@ -83,6 +85,7 @@ const Infra: NextPage = () => {
               <th>Indexing errors?</th>
               <th>Last Season</th>
               <th>Version</th>
+              <th>ID</th>
               <th></th>
             </tr>
           </thead>
