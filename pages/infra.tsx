@@ -9,10 +9,13 @@ const SUBGRAPHS = [
   `https://graph.node.bean.money/subgraphs/name/beanstalk-dev`,
   `https://graph.node.bean.money/subgraphs/name/beanstalk-testing`,
   `https://graph.node.bean.money/subgraphs/name/beanstalk-2-1-0`,
-  `https://graph.node.bean.money/subgraphs/name/beanstalk-2-0-3`
+  `https://graph.node.bean.money/subgraphs/name/beanstalk-2-0-4`,
+  `https://graph.node.bean.money/subgraphs/name/bean`,
+  `https://graph.node.bean.money/subgraphs/name/bean-dev`,
+  `https://graph.node.bean.money/subgraphs/name/bean-testing`,
 ]
 
-const checkSubgraphStatus = async (url: string) => {
+const checkSubgraphStatus = async (url: string, isBeanstalk: boolean) => {
   return (
     fetch(url, {
       method: 'POST',
@@ -25,11 +28,11 @@ const checkSubgraphStatus = async (url: string) => {
             deployment
             hasIndexingErrors
           }
-          beanstalk(id: "0xc1e088fc1323b20bcbee9bd1b9fc9546db5624c5") {
+          ${isBeanstalk ? `beanstalk(id: "0xc1e088fc1323b20bcbee9bd1b9fc9546db5624c5") {
             lastUpgrade
             lastSeason
             subgraphVersion
-          }
+          }` : ''}
         }`
       }),
       headers: {
@@ -48,7 +51,7 @@ const Subgraph : React.FC<{ url: string, latestBlockNumberNetwork?: number }> = 
 
   const load = useCallback(async () => {
     setLoading(true);
-    const data = await checkSubgraphStatus(url)
+    const data = await checkSubgraphStatus(url, url.includes("beanstalk"))
     setData(data);
     setLoading(false);
   }, [url]);
@@ -66,8 +69,8 @@ const Subgraph : React.FC<{ url: string, latestBlockNumberNetwork?: number }> = 
       <td><a href={url} target="_blank" rel="noreferrer">{url.split("/").pop()}</a></td>
       <td>{data?._meta.block.number || '-'}</td>
       <td>{data?._meta.hasIndexingErrors.toString() || '-'}</td>
-      <td>{data?.beanstalk.lastSeason || '-'}</td>
-      <td>{data?.beanstalk.subgraphVersion || '-'}</td>
+      <td>{data?.beanstalk?.lastSeason || '-'}</td>
+      <td>{data?.beanstalk?.subgraphVersion || '-'}</td>
       <td className="text-xs">{data?._meta.deployment || '-'}</td>
       <td>{loading ? 'loading...' : null}</td>
     </tr>
