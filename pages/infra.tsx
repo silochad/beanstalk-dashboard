@@ -9,10 +9,11 @@ const SUBGRAPHS = [
   `https://graph.node.bean.money/subgraphs/name/beanstalk-dev`,
   `https://graph.node.bean.money/subgraphs/name/beanstalk-testing`,
   `https://graph.node.bean.money/subgraphs/name/beanstalk-2-1-0`,
-  `https://graph.node.bean.money/subgraphs/name/beanstalk-2-0-4`,
   `https://graph.node.bean.money/subgraphs/name/bean`,
   `https://graph.node.bean.money/subgraphs/name/bean-dev`,
   `https://graph.node.bean.money/subgraphs/name/bean-testing`,
+  `https://graph.node.bean.money/subgraphs/name/basin`,
+  `https://graph.node.bean.money/subgraphs/name/basin-dev`,
 ]
 
 const checkSubgraphStatus = async (url: string, isBeanstalk: boolean) => {
